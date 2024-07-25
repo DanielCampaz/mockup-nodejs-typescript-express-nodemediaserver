@@ -3,7 +3,7 @@ import express, {
   Response as ExResponse,
   Request as ExRequest,
 } from "express";
-
+import cors from "cors";
 import { RegisterRoutes } from "../routes/routes";
 import NodeMediaServer from "node-media-server";
 import config from "./services/streaming/config";
@@ -15,6 +15,7 @@ export function main() {
 
   const nms = new NodeMediaServer(config);
 
+  app.use(cors());
   app.use(
     urlencoded({
       extended: true,
