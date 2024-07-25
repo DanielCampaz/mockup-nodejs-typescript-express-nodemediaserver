@@ -8,10 +8,11 @@ import { RegisterRoutes } from "../routes/routes";
 import NodeMediaServer from "node-media-server";
 import config from "./services/streaming/config";
 import swaggerUi from "swagger-ui-express";
+import { getConfig } from "./config";
 
 export function main() {
   const app = express();
-  const port = 3000;
+  const port = getConfig().PORT;
 
   const nms = new NodeMediaServer(config);
 
