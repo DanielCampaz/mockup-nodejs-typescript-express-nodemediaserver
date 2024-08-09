@@ -1,107 +1,109 @@
 import { ConfigNodeMediaServer } from "src/types/streamtypes";
 import ffmpeg from "@ffmpeg-installer/ffmpeg";
 
-const config: ConfigNodeMediaServer = {
-  logType: 3,
-  auth: {
-    //play: true,
-    //publish: true,
-    //secret: "yourSecret",
-    api_user: "apiUser",
-    api_pass: "apiPass",
-    api: true,
-  },
-  rtmp: {
-    port: 1935,
-    chunk_size: 60000,
-    gop_cache: true,
-    ping: 30,
-    ping_timeout: 60,
-  },
-  http: {
-    port: 8000,
-    mediaroot: "./media",
-    allow_origin: "*",
-  },
-  trans: {
-    ffmpeg: ffmpeg.path,
-    tasks: [
-      {
-        app: "live",
-        hls: true,
-        hlsFlags: "[hls_time=2:hls_list_size=3:hls_flags=delete_segments]",
-        hlsKeep: true,
-        dash: true,
-        dashFlags: "[f=dash:window_size=3:extra_window_size=5]",
-        dashKeep: true,
-        vc: "libx264",
-        vcParam: [
-          "-preset",
-          "fast",
-          "-profile:v",
-          "main",
-          "-level",
-          "3.1",
-          "-x264opts",
-          "keyint=60",
-        ],
-        ac: "aac",
-        acParam: ["-ab", "128k", "-ac", "2", "-ar", "44100"],
-        rtmp: true,
-        rtmpApp: "live",
-        mp4: false,
-        mp4Flags: "[movflags=frag_keyframe+empty_moov]",
-      },
-    ],
-  },
-  //   relay: { // Relay es para retransmitir a otro servidor
-  //     ffmpeg: ffmpeg.path,
-  //     tasks: [
-  //       {
-  //         app: "live",
-  //         mode: "push", // push es enviar nuestra transmicion y pull es tomar de otra peticion
-  //         edge: "rtmp://other-server/live",
-  //         appendName: false,
-  //       },
-  //     ],
-  //   },
-  fission: {
-    ffmpeg: ffmpeg.path,
-    tasks: [
-      {
-        rule: "live/*",
-        model: [
-          {
-            ab: "128k",
-            vb: "500k",
-            vs: "640x360",
-            vf: "30",
-          },
-          {
-            ab: "128k", // Bitrate de audio para 720p
-            vb: "2500k", // Bitrate de video para 720p
-            vs: "1280x720", // Resolución 720p
-            vf: "30", // Frame rate
-          },
-          {
-            ab: "192k", // Bitrate de audio
-            vb: "5000k", // Bitrate de video para 1080p
-            vs: "1920x1080", // Resolución 1080p
-            vf: "30", // Frame rate
-          },
-          {
-            ab: "384k", // Bitrate de audio para 4K
-            vb: "15000k", // Bitrate de video para 4K
-            vs: "3840x2160", // Resolución 4K
-            vf: "30", // Frame rate
-          },
-        ],
-      },
-    ],
-  },
-};
-
-export default config;
+export default function getConfigNodeMediaServer(
+  port: number = 8000
+): ConfigNodeMediaServer {
+  return {
+    logType: 3,
+    auth: {
+      //play: true,
+      //publish: true,
+      //secret: "yourSecret",
+      api_user: "apiUser",
+      api_pass: "apiPass",
+      api: true,
+    },
+    rtmp: {
+      port: 1935,
+      chunk_size: 60000,
+      gop_cache: true,
+      ping: 30,
+      ping_timeout: 60,
+    },
+    http: {
+      port,
+      mediaroot: "./media",
+      allow_origin: "*",
+    },
+    trans: {
+      ffmpeg: ffmpeg.path,
+      tasks: [
+        {
+          app: "live",
+          hls: true,
+          hlsFlags: "[hls_time=2:hls_list_size=3:hls_flags=delete_segments]",
+          hlsKeep: true,
+          dash: true,
+          dashFlags: "[f=dash:window_size=3:extra_window_size=5]",
+          dashKeep: true,
+          vc: "libx264",
+          vcParam: [
+            "-preset",
+            "fast",
+            "-profile:v",
+            "main",
+            "-level",
+            "3.1",
+            "-x264opts",
+            "keyint=60",
+          ],
+          ac: "aac",
+          acParam: ["-ab", "128k", "-ac", "2", "-ar", "44100"],
+          rtmp: true,
+          rtmpApp: "live",
+          mp4: false,
+          mp4Flags: "[movflags=frag_keyframe+empty_moov]",
+        },
+      ],
+    },
+    //   relay: { // Relay es para retransmitir a otro servidor
+    //     ffmpeg: ffmpeg.path,
+    //     tasks: [
+    //       {
+    //         app: "live",
+    //         mode: "push", // push es enviar nuestra transmicion y pull es tomar de otra peticion
+    //         edge: "rtmp://other-server/live",
+    //         appendName: false,
+    //       },
+    //     ],
+    //   },
+    fission: {
+      ffmpeg: ffmpeg.path,
+      tasks: [
+        {
+          rule: "live/*",
+          model: [
+            {
+              ab: "128k",
+              vb: "500k",
+              vs: "640x360",
+              vf: "30",
+            },
+            {
+              ab: "128k", // Bitrate de audio para 720p
+              vb: "2500k", // Bitrate de video para 720p
+              vs: "1280x720", // Resolución 720p
+              vf: "30", // Frame rate
+            },
+            {
+              ab: "192k", // Bitrate de audio
+              vb: "5000k", // Bitrate de video para 1080p
+              vs: "1920x1080", // Resolución 1080p
+              vf: "30", // Frame rate
+            },
+            {
+              ab: "384k", // Bitrate de audio para 4K
+              vb: "15000k", // Bitrate de video para 4K
+              vs: "3840x2160", // Resolución 4K
+              vf: "30", // Frame rate
+            },
+          ],
+        },
+      ],
+    },
+  };
+}
 
 /* FIXME: Acceder a las calidades 
 

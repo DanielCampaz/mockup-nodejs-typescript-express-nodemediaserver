@@ -14,7 +14,7 @@ export function main() {
   const app = express();
   const port = getConfig().PORT;
 
-  const nms = new NodeMediaServer(config);
+  const nms = new NodeMediaServer(config());
 
   app.use(cors());
   app.use(
