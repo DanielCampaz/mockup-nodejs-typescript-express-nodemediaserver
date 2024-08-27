@@ -25,7 +25,9 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "moduleResolution": "node",
-    "experimentalDecorators":true
+    "experimentalDecorators":true,
+    
+    "emitDecoratorMetadata": true,
   },
   "include": [
     "./src/**/*.ts"
